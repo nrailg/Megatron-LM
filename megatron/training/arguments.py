@@ -8,6 +8,7 @@ import json
 import os
 import types
 import warnings
+import copy
 from packaging.version import Version as PkgVersion
 
 import torch
@@ -75,6 +76,16 @@ def parse_args(extra_args_provider=None, ignore_unknown_args=False):
             "Yaml config is not supported with legacy models."
         args = load_yaml(args.yaml_cfg)
 
+    print(args.cli_arg_yaml_cfgs)
+    if args.cli_arg_yaml_cfgs is not None:
+        import yaml
+        assert args.yaml_cfg is None, 'cli arg yaml config is not compatible with `args.yaml_cfg`'
+        tmp_args = copy.deepcopy(args.__dict__)
+        for cfg_path in args.cli_arg_yaml_cfgs:
+            with open(cfg_path, "r") as in_f:
+                part_arg = yaml.load(in_f, Loader=yaml.FullLoader)
+            tmp_args.update(part_arg)
+        args = types.SimpleNamespace(**tmp_args)
 
     # Args from environment
     args.rank = int(os.getenv('RANK', '0'))
@@ -2289,6 +2300,8 @@ def _add_experimental_args(parser):
                        'the overidden pattern')
     group.add_argument('--yaml-cfg', type=str, default=None,
                        help = 'Config file to add additional arguments')
+    group.add_argument('--cli-arg-yaml-cfgs', type=str, default=None, nargs='*',
+                       help='yaml config files, each storing part of cli args')
 
     # Args of precision-aware optimizer
     group.add_argument('--use-precision-aware-optimizer', action='store_true',
