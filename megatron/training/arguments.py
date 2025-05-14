@@ -76,7 +76,6 @@ def parse_args(extra_args_provider=None, ignore_unknown_args=False):
             "Yaml config is not supported with legacy models."
         args = load_yaml(args.yaml_cfg)
 
-    print(args.cli_arg_yaml_cfgs)
     if args.cli_arg_yaml_cfgs is not None:
         import yaml
         assert args.yaml_cfg is None, 'cli arg yaml config is not compatible with `args.yaml_cfg`'
