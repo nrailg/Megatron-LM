@@ -1,4 +1,5 @@
-data_path: ../oscar-data/my-gpt2_text_document
-vocab_file: ../oscar-data/gpt2-vocab.json
-merge_file: ../oscar-data/gpt2-merges.txt
+data_path:
+  - "../oscar-data/my-gpt2_text_document"
+vocab_file: "../oscar-data/gpt2-vocab.json"
+merge_file: "../oscar-data/gpt2-merges.txt"
 split: '949,50,1'
