@@ -18,6 +18,7 @@ from megatron.core.tensor_parallel.layers import ColumnParallelLinear, RowParall
 from megatron.core.transformer.mlp import MLPSubmodules
 from megatron.core.transformer.moe.experts import GroupedMLP, SequentialMLP, TEGroupedMLP
 from megatron.core.utils import get_te_version, is_te_min_version
+from megatron.core.transformer.dot_product_attention_cp import DotProductAttentionCp
 
 
 class TESpecProvider(BackendSpecProvider):
@@ -50,7 +51,8 @@ class TESpecProvider(BackendSpecProvider):
 
     def core_attention(self) -> type:
         """Which module to use for attention"""
-        return TEDotProductAttention
+        # return TEDotProductAttention
+        return DotProductAttentionCp
 
     def grouped_mlp_modules(
         self, moe_use_grouped_gemm: bool, moe_use_legacy_grouped_gemm: bool
